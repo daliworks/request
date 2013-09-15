@@ -332,6 +332,8 @@ Request.prototype.init = function (options) {
   if (!self.httpModule) return this.emit('error', new Error("Invalid protocol"))
 
   if (options.ca) self.ca = options.ca
+  if (options.pfx) self.pfx = options.pfx
+  if (options.passphrase) self.passphrase = options.passphrase
 
   if (!self.agent) {
     if (options.agentOptions) self.agentOptions = options.agentOptions
@@ -486,6 +488,8 @@ Request.prototype.getAgent = function () {
     }
   }
   if (this.ca) options.ca = this.ca
+  if (this.pfx) options.pfx = this.pfx
+  if (this.passphrase) options.pfx = this.passphrase
   if (typeof this.rejectUnauthorized !== 'undefined')
     options.rejectUnauthorized = this.rejectUnauthorized;
 
@@ -517,6 +521,10 @@ Request.prototype.getAgent = function () {
     if (options.ca) {
       if (poolKey) poolKey += ':'
       poolKey += options.ca
+    }
+    if (options.pfx) {
+      if (poolKey) poolKey += ':'
+      poolKey += options.pfx.toString('ascii');
     }
 
     if (typeof options.rejectUnauthorized !== 'undefined') {
