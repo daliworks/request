@@ -573,8 +573,13 @@ Request.prototype.start = function () {
   var reqOptions = copy(self)
   delete reqOptions.auth
 
-  self.req = self.httpModule.request(reqOptions, self.onResponse.bind(self))
-
+  try {
+    self.req = self.httpModule.request(reqOptions, self.onResponse.bind(self))
+  } catch (e) {
+    self.emit("error", e)
+    return;
+  }
+  
   if (self.timeout && !self.timeoutTimer) {
     self.timeoutTimer = setTimeout(function () {
       self.req.abort()
@@ -1106,7 +1111,9 @@ Request.prototype.write = function () {
 Request.prototype.end = function (chunk) {
   if (chunk) this.write(chunk)
   if (!this._started) this.start()
-  this.req.end()
+  if (this.req) {
+    this.req.end();
+  }
 }
 Request.prototype.pause = function () {
   if (!this.response) this._paused = true
