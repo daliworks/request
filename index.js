@@ -489,7 +489,7 @@ Request.prototype.getAgent = function () {
   }
   if (this.ca) options.ca = this.ca
   if (this.pfx) options.pfx = this.pfx
-  if (this.passphrase) options.pfx = this.passphrase
+  if (this.passphrase) options.passphrase = this.passphrase
   if (typeof this.rejectUnauthorized !== 'undefined')
     options.rejectUnauthorized = this.rejectUnauthorized;
 
